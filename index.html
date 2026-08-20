@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A tactile Neumorphic To-Do List app with One-Time and Daily renewable tasks.">
+  <title>Neumorph To-Do • Daily & One-Time Tasks</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Section -->
+    <header class="header neu-card">
+      <div class="header-main">
+        <div class="logo-group">
+          <div class="logo-icon neu-convex">
+            <i data-lucide="check-circle-2"></i>
+          </div>
+          <div>
+            <h1 class="app-title">TaskFlow</h1>
+            <p class="app-subtitle">Neumorphic Task & Habit Tracker</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <!-- Midnight Clock & Countdown Badge -->
+          <div class="midnight-tracker neu-inset" title="Daily tasks reset every day at 12:00 AM Midnight">
+            <div class="tracker-icon-pulse">
+              <i data-lucide="moon-star"></i>
+            </div>
+            <div class="tracker-text">
+              <span class="tracker-label">Daily Reset In</span>
+              <span id="midnightCountdown" class="tracker-time">00:00:00</span>
+            </div>
+          </div>
+          <!-- Dark / Light Mode Toggle -->
+          <button id="themeToggleBtn" class="neu-btn-icon" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+            <i data-lucide="moon" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Summary Stats -->
+      <div class="stats-row">
+        <div class="stat-card neu-inset">
+          <div class="stat-icon daily-color">
+            <i data-lucide="repeat"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-num" id="dailyTasksStat">0/0</span>
+            <span class="stat-label">Daily Tasks (Renews 12:00 AM)</span>
+          </div>
+        </div>
+        <div class="stat-card neu-inset">
+          <div class="stat-icon onetime-color">
+            <i data-lucide="pin"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-num" id="oneTimeTasksStat">0/0</span>
+            <span class="stat-label">One-Time Tasks (Permanent)</span>
+          </div>
+        </div>
+        <div class="stat-card neu-inset">
+          <div class="stat-icon total-color">
+            <i data-lucide="sparkles"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-num" id="overallCompletionStat">0%</span>
+            <span class="stat-label">Total Completed</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Create Task Card -->
+      <section class="task-form-card neu-card">
+        <h2 class="section-title">
+          <i data-lucide="plus-circle" class="title-icon"></i>
+          Create New Task
+        </h2>
+        
+        <form id="taskForm" class="task-form" autocomplete="off">
+          <div class="form-inputs">
+            <div class="input-wrapper neu-inset">
+              <i data-lucide="edit-3" class="input-icon"></i>
+              <input type="text" id="taskTitleInput" placeholder="What do you need to get done?" required maxlength="120">
+            </div>
+
+            <!-- Task Type Selector (One-Time vs Daily) -->
+            <div class="type-selector-group">
+              <label class="selector-label">Task Type:</label>
+              <div class="type-pills-container neu-inset">
+                <button type="button" class="type-pill active" data-type="daily" id="typeDailyBtn">
+                  <i data-lucide="repeat"></i>
+                  <span>Daily Task</span>
+                  <small class="pill-badge">Renews Midnight</small>
+                </button>
+                <button type="button" class="type-pill" data-type="one-time" id="typeOneTimeBtn">
+                  <i data-lucide="pin"></i>
+                  <span>One-Time Task</span>
+                  <small class="pill-badge">Stays Done</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- Optional details row -->
+            <div class="form-row-details">
+              <div class="input-wrapper neu-inset flex-grow">
+                <i data-lucide="tag" class="input-icon"></i>
+                <input type="text" id="taskTagInput" placeholder="Category / Tag (e.g. Work, Health, Study)" maxlength="24">
+              </div>
+              <div class="input-wrapper neu-inset time-input-wrapper">
+                <i data-lucide="clock" class="input-icon"></i>
+                <input type="time" id="taskTimeInput" title="Optional Target Time">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-submit-row">
+            <button type="submit" id="addTaskBtn" class="neu-btn-primary">
+              <i data-lucide="plus"></i>
+              <span>Add Task</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Tasks Controls (Filters & Search) -->
+      <section class="controls-section neu-card">
+        <div class="search-bar-wrapper neu-inset">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search tasks by title or tag...">
+          <button type="button" id="clearSearchBtn" class="clear-search-btn hidden" aria-label="Clear Search">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="filter-tabs-wrapper">
+          <div class="filter-tabs neu-inset">
+            <button type="button" class="filter-tab active" data-filter="all">All Tasks</button>
+            <button type="button" class="filter-tab" data-filter="daily">
+              <i data-lucide="repeat" class="tab-icon"></i> Daily (<span id="dailyTabCount">0</span>)
+            </button>
+            <button type="button" class="filter-tab" data-filter="one-time">
+              <i data-lucide="pin" class="tab-icon"></i> One-Time (<span id="oneTimeTabCount">0</span>)
+            </button>
+            <button type="button" class="filter-tab" data-filter="active">Active</button>
+            <button type="button" class="filter-tab" data-filter="completed">Completed</button>
+          </div>
+
+          <!-- Dev / Demo Helper Button to simulate midnight renewal easily -->
+          <button type="button" id="simulateMidnightBtn" class="neu-btn-secondary" title="Test how daily tasks automatically renew at 12:00 AM midnight">
+            <i data-lucide="sparkle"></i>
+            <span>Test Midnight Reset</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Task Lists Container -->
+      <section class="tasks-display-section">
+        <!-- Daily Tasks Group (if on All or Daily filter) -->
+        <div id="dailySectionContainer" class="task-group-container">
+          <div class="group-header">
+            <div class="group-title-wrap">
+              <div class="group-badge daily-badge neu-convex">
+                <i data-lucide="repeat"></i>
+              </div>
+              <div>
+                <h3 class="group-heading">Daily Habits & Tasks</h3>
+                <p class="group-subtext">These automatically renew every midnight at 12:00 AM</p>
+              </div>
+            </div>
+            <span class="group-counter" id="dailyCounterBadge">0 tasks</span>
+          </div>
+          <div id="dailyTaskList" class="task-list"></div>
+        </div>
+
+        <!-- One-Time Tasks Group (if on All or One-Time filter) -->
+        <div id="oneTimeSectionContainer" class="task-group-container">
+          <div class="group-header">
+            <div class="group-title-wrap">
+              <div class="group-badge onetime-badge neu-convex">
+                <i data-lucide="pin"></i>
+              </div>
+              <div>
+                <h3 class="group-heading">One-Time Tasks</h3>
+                <p class="group-subtext">Once completed, these remain permanently completed</p>
+              </div>
+            </div>
+            <span class="group-counter" id="oneTimeCounterBadge">0 tasks</span>
+          </div>
+          <div id="oneTimeTaskList" class="task-list"></div>
+        </div>
+
+        <!-- Unified Empty State -->
+        <div id="emptyState" class="empty-state neu-card hidden">
+          <div class="empty-state-icon neu-convex">
+            <i data-lucide="clipboard-check"></i>
+          </div>
+          <h3 class="empty-title">No Tasks Found</h3>
+          <p class="empty-desc">You're all caught up! Add a new daily routine or one-time task above to get started.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer with informative note -->
+    <footer class="app-footer">
+      <div class="footer-card neu-inset">
+        <div class="footer-note">
+          <i data-lucide="info"></i>
+          <span><strong>How Renewals Work:</strong> Daily tasks reset to uncompleted at 12:00 AM Midnight. One-time tasks are permanent and will never renew.</span>
+        </div>
+        <div class="footer-date" id="currentDateDisplay">Today</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Edit Task Neumorphic Modal -->
+  <div id="editModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal-card neu-card">
+      <div class="modal-header">
+        <h3 id="editModalTitle" class="modal-title">
+          <i data-lucide="edit-3"></i>
+          Edit Task
+        </h3>
+        <button id="closeEditModalBtn" class="neu-btn-icon small-btn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form id="editTaskForm" class="modal-form">
+        <input type="hidden" id="editTaskId">
+        
+        <div class="input-wrapper neu-inset">
+          <i data-lucide="edit-3" class="input-icon"></i>
+          <input type="text" id="editTaskTitleInput" required maxlength="120" placeholder="Task title">
+        </div>
+
+        <div class="type-selector-group">
+          <label class="selector-label">Task Type:</label>
+          <div class="type-pills-container neu-inset">
+            <button type="button" class="type-pill" data-type="daily" id="editTypeDailyBtn">
+              <i data-lucide="repeat"></i>
+              <span>Daily (Renews 12 AM)</span>
+            </button>
+            <button type="button" class="type-pill" data-type="one-time" id="editTypeOneTimeBtn">
+              <i data-lucide="pin"></i>
+              <span>One-Time (Permanent)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row-details">
+          <div class="input-wrapper neu-inset flex-grow">
+            <i data-lucide="tag" class="input-icon"></i>
+            <input type="text" id="editTaskTagInput" placeholder="Category / Tag" maxlength="24">
+          </div>
+          <div class="input-wrapper neu-inset time-input-wrapper">
+            <i data-lucide="clock" class="input-icon"></i>
+            <input type="time" id="editTaskTimeInput">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelEditBtn" class="neu-btn-secondary">Cancel</button>
+          <button type="submit" class="neu-btn-primary">
+            <i data-lucide="save"></i>
+            <span>Save Changes</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

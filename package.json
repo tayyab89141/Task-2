@@ -1,0 +1,19 @@
+{
+  "name": "neumorphic-todo-taskflow",
+  "version": "1.0.0",
+  "description": "Tactile Neumorphic To-Do web app with One-Time and Daily renewable tasks",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve . -l 5173",
+    "start": "npx -y serve . -l 5173",
+    "test": "node test_todo.js"
+  },
+  "keywords": [
+    "todo",
+    "neumorphism",
+    "habit-tracker",
+    "daily-tasks"
+  ],
+  "author": "",
+  "license": "MIT"
+}
