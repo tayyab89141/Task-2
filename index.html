@@ -28,6 +28,20 @@
           </div>
         </div>
         <div class="header-actions">
+          <!-- User Profile & Local Progress Badge -->
+          <button type="button" id="userProfileBtn" class="user-profile-badge neu-inset" title="Local User Profile & Progress Tracker" aria-label="Open User Profile and Progress">
+            <div class="user-avatar-icon">
+              <i data-lucide="user-check"></i>
+            </div>
+            <div class="user-badge-details">
+              <div class="user-id-text" id="headerUserId">ID: USR-8492</div>
+              <div class="user-status-text">
+                <span class="status-dot"></span>
+                <span>Saved Locally</span>
+              </div>
+            </div>
+          </button>
+
           <!-- Midnight Clock & Countdown Badge -->
           <div class="midnight-tracker neu-inset" title="Daily tasks reset every day at 12:00 AM Midnight">
             <div class="tracker-icon-pulse">
@@ -276,6 +290,91 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- User Profile & Progress Modal -->
+  <div id="profileModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+    <div class="modal-card neu-card profile-modal-card">
+      <div class="modal-header">
+        <div class="profile-header-title-wrap">
+          <div class="profile-avatar-large neu-convex">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <div>
+            <h3 id="profileModalTitle" class="modal-title">User Progress & Profile</h3>
+            <p class="profile-subtitle">Local Profile &bull; 100% Private, No Login Required</p>
+          </div>
+        </div>
+        <button type="button" id="closeProfileModalBtn" class="neu-btn-icon small-btn" aria-label="Close profile modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- User ID Banner -->
+      <div class="user-id-card neu-inset">
+        <div class="user-id-info">
+          <span class="user-id-label">Assigned User ID</span>
+          <span class="user-id-value" id="profileUserIdDisplay">USR-0000-00</span>
+        </div>
+        <button type="button" id="copyUserIdBtn" class="neu-btn-secondary copy-id-btn" title="Copy User ID to clipboard">
+          <i data-lucide="copy" id="copyIdIcon"></i>
+          <span id="copyIdBtnText">Copy ID</span>
+        </button>
+      </div>
+
+      <!-- User Stats Overview Grid -->
+      <div class="profile-stats-grid">
+        <div class="profile-stat-box neu-inset">
+          <span class="profile-stat-number" id="statAllTimeCompleted">0</span>
+          <span class="profile-stat-name">All-Time Completed</span>
+        </div>
+        <div class="profile-stat-box neu-inset">
+          <span class="profile-stat-number" id="statDailyStreak">0 days</span>
+          <span class="profile-stat-name">Daily Habit Streak</span>
+        </div>
+        <div class="profile-stat-box neu-inset">
+          <span class="profile-stat-number" id="statTotalCreated">0</span>
+          <span class="profile-stat-name">Total Tasks Created</span>
+        </div>
+        <div class="profile-stat-box neu-inset">
+          <span class="profile-stat-number" id="statMemberSince">Today</span>
+          <span class="profile-stat-name">Active Since</span>
+        </div>
+      </div>
+
+      <!-- User Profile Settings / Options -->
+      <div class="profile-actions-section">
+        <div class="input-wrapper neu-inset">
+          <i data-lucide="user" class="input-icon"></i>
+          <input type="text" id="profileDisplayNameInput" placeholder="Display Name (e.g. Alex)" maxlength="30">
+        </div>
+
+        <div class="profile-btn-row">
+          <button type="button" id="saveProfileNameBtn" class="neu-btn-primary flex-grow">
+            <i data-lucide="save"></i>
+            <span>Update Name</span>
+          </button>
+          <button type="button" id="exportDataBtn" class="neu-btn-secondary" title="Export your tasks and progress as a JSON file">
+            <i data-lucide="download"></i>
+            <span>Backup Data</span>
+          </button>
+        </div>
+
+        <!-- Import JSON file hidden input -->
+        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+        
+        <div class="profile-footer-actions">
+          <button type="button" id="importDataBtn" class="profile-link-btn" title="Restore tasks from a JSON backup">
+            <i data-lucide="upload"></i>
+            <span>Import Backup</span>
+          </button>
+          <button type="button" id="resetUserBtn" class="profile-link-btn danger-link" title="Generate new User ID and reset all data">
+            <i data-lucide="refresh-cw"></i>
+            <span>Generate New User ID</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

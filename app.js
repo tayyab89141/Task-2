@@ -1,6 +1,9 @@
 /**
- * TaskFlow - Neumorphic Task & Habit Tracker
- * Features One-Time Tasks (Permanent completion) & Daily Tasks (Automatic midnight renewal at 12:00 AM)
+ * TaskFlow - Tactile Neumorphic Task & Habit Tracker
+ * Features:
+ * - One-Time Tasks: Once completed, remain permanently completed (never renewed)
+ * - Daily Tasks: Automatically renew (reset to uncompleted) every 12:00 AM Midnight
+ * - Local User ID & Progress Persistence: Client-side storage (localStorage) without login or database
  */
 
 (() => {
@@ -8,6 +11,7 @@
   const STORAGE_KEY_TASKS = 'taskflow_tasks_v1';
   const STORAGE_KEY_THEME = 'taskflow_theme';
   const STORAGE_KEY_LAST_RESET = 'taskflow_last_reset_date';
+  const STORAGE_KEY_USER_PROFILE = 'taskflow_user_profile_v1';
 
   // State
   let tasks = [];
@@ -16,7 +20,32 @@
   let selectedNewTaskType = 'daily';
   let selectedEditTaskType = 'daily';
 
-  // DOM Elements
+  let userProfile = {
+    userId: '',
+    displayName: 'TaskFlow User',
+    createdAt: '',
+    stats: {
+      totalCreated: 0,
+      totalCompleted: 0,
+      dailyStreakDays: 1,
+      lastActiveDate: ''
+    }
+  };
+
+  // DOM Elements - Navigation & Header
+  const userProfileBtn = document.getElementById('userProfileBtn');
+  const headerUserId = document.getElementById('headerUserId');
+  const midnightCountdown = document.getElementById('midnightCountdown');
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  const themeIcon = document.getElementById('themeIcon');
+  const currentDateDisplay = document.getElementById('currentDateDisplay');
+
+  // Stats Dashboard
+  const dailyTasksStat = document.getElementById('dailyTasksStat');
+  const oneTimeTasksStat = document.getElementById('oneTimeTasksStat');
+  const overallCompletionStat = document.getElementById('overallCompletionStat');
+
+  // Create Task Form Elements
   const taskForm = document.getElementById('taskForm');
   const taskTitleInput = document.getElementById('taskTitleInput');
   const taskTagInput = document.getElementById('taskTagInput');
@@ -24,31 +53,23 @@
   const typeDailyBtn = document.getElementById('typeDailyBtn');
   const typeOneTimeBtn = document.getElementById('typeOneTimeBtn');
 
+  // Task Display & Groups
   const dailyTaskList = document.getElementById('dailyTaskList');
   const oneTimeTaskList = document.getElementById('oneTimeTaskList');
   const dailySectionContainer = document.getElementById('dailySectionContainer');
   const oneTimeSectionContainer = document.getElementById('oneTimeSectionContainer');
   const emptyState = document.getElementById('emptyState');
 
+  // Controls & Filters
   const searchInput = document.getElementById('searchInput');
   const clearSearchBtn = document.getElementById('clearSearchBtn');
   const filterTabs = document.querySelectorAll('.filter-tab');
+  const simulateMidnightBtn = document.getElementById('simulateMidnightBtn');
 
   const dailyTabCount = document.getElementById('dailyTabCount');
   const oneTimeTabCount = document.getElementById('oneTimeTabCount');
   const dailyCounterBadge = document.getElementById('dailyCounterBadge');
   const oneTimeCounterBadge = document.getElementById('oneTimeCounterBadge');
-
-  const dailyTasksStat = document.getElementById('dailyTasksStat');
-  const oneTimeTasksStat = document.getElementById('oneTimeTasksStat');
-  const overallCompletionStat = document.getElementById('overallCompletionStat');
-
-  const midnightCountdown = document.getElementById('midnightCountdown');
-  const simulateMidnightBtn = document.getElementById('simulateMidnightBtn');
-  const currentDateDisplay = document.getElementById('currentDateDisplay');
-
-  const themeToggleBtn = document.getElementById('themeToggleBtn');
-  const themeIcon = document.getElementById('themeIcon');
 
   // Edit Modal Elements
   const editModal = document.getElementById('editModal');
@@ -61,6 +82,26 @@
   const editTypeOneTimeBtn = document.getElementById('editTypeOneTimeBtn');
   const closeEditModalBtn = document.getElementById('closeEditModalBtn');
   const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+  // User Profile & Progress Modal Elements
+  const profileModal = document.getElementById('profileModal');
+  const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
+  const profileUserIdDisplay = document.getElementById('profileUserIdDisplay');
+  const copyUserIdBtn = document.getElementById('copyUserIdBtn');
+  const copyIdIcon = document.getElementById('copyIdIcon');
+  const copyIdBtnText = document.getElementById('copyIdBtnText');
+  const statAllTimeCompleted = document.getElementById('statAllTimeCompleted');
+  const statDailyStreak = document.getElementById('statDailyStreak');
+  const statTotalCreated = document.getElementById('statTotalCreated');
+  const statMemberSince = document.getElementById('statMemberSince');
+  const profileDisplayNameInput = document.getElementById('profileDisplayNameInput');
+  const saveProfileNameBtn = document.getElementById('saveProfileNameBtn');
+  const exportDataBtn = document.getElementById('exportDataBtn');
+  const importDataBtn = document.getElementById('importDataBtn');
+  const importFileInput = document.getElementById('importFileInput');
+  const resetUserBtn = document.getElementById('resetUserBtn');
+
+  // Toast Container
   const toastContainer = document.getElementById('toastContainer');
 
   /* ===================================================================
@@ -75,8 +116,9 @@
     return `${year}-${month}-${day}`;
   }
 
-  // Format date for footer display
+  // Format date for footer and profile display
   function formatFriendlyDate(dateObj = new Date()) {
+    if (isNaN(dateObj.getTime())) dateObj = new Date();
     return dateObj.toLocaleDateString(undefined, {
       weekday: 'short',
       month: 'short',
@@ -85,15 +127,24 @@
     });
   }
 
-  // Generate unique ID
+  // Generate Unique Task ID
   function generateId() {
     return 'task_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
   }
 
-  // Sanitize text output for security
+  // Generate Unique User Profile ID (e.g. TF-8492-K39X)
+  function generateUserId() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let p1 = '', p2 = '';
+    for (let i = 0; i < 4; i++) p1 += chars.charAt(Math.floor(Math.random() * chars.length));
+    for (let i = 0; i < 4; i++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+    return `TF-${p1}-${p2}`;
+  }
+
+  // Sanitize text output for XSS prevention
   function escapeHTML(str) {
     if (!str) return '';
-    return str
+    return String(str)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
@@ -101,7 +152,7 @@
       .replace(/'/g, '&#039;');
   }
 
-  // Show Toast Notification
+  // Show Tactile Toast Notification
   function showToast(message, type = 'info', iconName = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -118,6 +169,221 @@
       toast.style.transform = 'translateY(15px)';
       setTimeout(() => toast.remove(), 300);
     }, 3200);
+  }
+
+  /* ===================================================================
+     User Profile & Local Progress Persistence (No Login, No Database)
+     =================================================================== */
+
+  function loadUserProfile() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY_USER_PROFILE);
+      if (stored) {
+        userProfile = JSON.parse(stored);
+        // Ensure data integrity
+        if (!userProfile.userId) userProfile.userId = generateUserId();
+        if (!userProfile.stats) {
+          userProfile.stats = { totalCreated: tasks.length, totalCompleted: 0, dailyStreakDays: 1, lastActiveDate: getLocalDateString() };
+        }
+      } else {
+        userProfile = {
+          userId: generateUserId(),
+          displayName: 'TaskFlow User',
+          createdAt: new Date().toISOString(),
+          stats: {
+            totalCreated: 5,
+            totalCompleted: 2,
+            dailyStreakDays: 1,
+            lastActiveDate: getLocalDateString()
+          }
+        };
+        saveUserProfile();
+      }
+    } catch (e) {
+      console.error('Failed to load user profile from localStorage', e);
+      userProfile = {
+        userId: generateUserId(),
+        displayName: 'TaskFlow User',
+        createdAt: new Date().toISOString(),
+        stats: { totalCreated: 0, totalCompleted: 0, dailyStreakDays: 1, lastActiveDate: getLocalDateString() }
+      };
+    }
+    updateUserProfileUI();
+  }
+
+  function saveUserProfile() {
+    try {
+      localStorage.setItem(STORAGE_KEY_USER_PROFILE, JSON.stringify(userProfile));
+    } catch (e) {
+      console.error('Failed to save user profile to localStorage', e);
+    }
+    updateUserProfileUI();
+  }
+
+  function updateUserProfileUI() {
+    if (headerUserId) {
+      headerUserId.textContent = userProfile.userId;
+    }
+    if (profileUserIdDisplay) {
+      profileUserIdDisplay.textContent = userProfile.userId;
+    }
+    if (statAllTimeCompleted) {
+      statAllTimeCompleted.textContent = userProfile.stats.totalCompleted;
+    }
+    if (statDailyStreak) {
+      const days = userProfile.stats.dailyStreakDays || 1;
+      statDailyStreak.textContent = `${days} day${days === 1 ? '' : 's'}`;
+    }
+    if (statTotalCreated) {
+      statTotalCreated.textContent = userProfile.stats.totalCreated;
+    }
+    if (statMemberSince) {
+      const createdDate = userProfile.createdAt ? new Date(userProfile.createdAt) : new Date();
+      statMemberSince.textContent = formatFriendlyDate(createdDate);
+    }
+    if (profileDisplayNameInput) {
+      profileDisplayNameInput.value = userProfile.displayName || '';
+    }
+  }
+
+  function openProfileModal() {
+    updateUserProfileUI();
+    profileModal.classList.remove('hidden');
+    lucide.createIcons();
+  }
+
+  function closeProfileModal() {
+    profileModal.classList.add('hidden');
+  }
+
+  function copyUserIdToClipboard() {
+    const idToCopy = userProfile.userId;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(idToCopy).then(() => {
+        handleCopyFeedback();
+      }).catch(() => {
+        fallbackCopyText(idToCopy);
+      });
+    } else {
+      fallbackCopyText(idToCopy);
+    }
+  }
+
+  function fallbackCopyText(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      handleCopyFeedback();
+    } catch (err) {
+      showToast('Could not copy automatically. Your ID is: ' + text, 'info');
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function handleCopyFeedback() {
+    if (copyIdBtnText) copyIdBtnText.textContent = 'Copied!';
+    if (copyIdIcon) copyIdIcon.setAttribute('data-lucide', 'check');
+    lucide.createIcons();
+    showToast(`User ID "${userProfile.userId}" copied to clipboard!`, 'success', 'copy');
+
+    setTimeout(() => {
+      if (copyIdBtnText) copyIdBtnText.textContent = 'Copy ID';
+      if (copyIdIcon) copyIdIcon.setAttribute('data-lucide', 'copy');
+      lucide.createIcons();
+    }, 2500);
+  }
+
+  function saveProfileName() {
+    const newName = profileDisplayNameInput.value.trim();
+    if (!newName) {
+      showToast('Please enter a valid display name', 'warning', 'alert-circle');
+      return;
+    }
+    userProfile.displayName = newName;
+    saveUserProfile();
+    showToast(`Display name updated to "${newName}"`, 'success', 'user-check');
+  }
+
+  function exportUserData() {
+    const exportPayload = {
+      version: '1.0.0',
+      exportedAt: new Date().toISOString(),
+      userProfile: userProfile,
+      tasks: tasks,
+      lastResetDate: localStorage.getItem(STORAGE_KEY_LAST_RESET)
+    };
+
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `TaskFlow_${userProfile.userId}_Backup_${getLocalDateString()}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+
+    showToast('Progress and tasks backup exported successfully!', 'success', 'download');
+  }
+
+  function importUserData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const imported = JSON.parse(event.target.result);
+        if (imported.tasks && Array.isArray(imported.tasks)) {
+          tasks = imported.tasks;
+          saveTasks();
+        }
+        if (imported.userProfile) {
+          userProfile = imported.userProfile;
+          saveUserProfile();
+        }
+        if (imported.lastResetDate) {
+          localStorage.setItem(STORAGE_KEY_LAST_RESET, imported.lastResetDate);
+        }
+
+        renderTasks();
+        updateStats();
+        updateUserProfileUI();
+        closeProfileModal();
+        showToast('Backup restored successfully!', 'success', 'check-circle-2');
+      } catch (err) {
+        showToast('Invalid backup file. Please provide a valid TaskFlow JSON file.', 'warning', 'alert-triangle');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = ''; // reset file input
+  }
+
+  function resetUserProfile() {
+    if (confirm('Are you sure you want to generate a new User ID? Your previous local progress and tasks will be refreshed.')) {
+      userProfile = {
+        userId: generateUserId(),
+        displayName: 'TaskFlow User',
+        createdAt: new Date().toISOString(),
+        stats: {
+          totalCreated: 0,
+          totalCompleted: 0,
+          dailyStreakDays: 1,
+          lastActiveDate: getLocalDateString()
+        }
+      };
+      tasks = getSampleTasks();
+      saveTasks();
+      saveUserProfile();
+      renderTasks();
+      updateStats();
+      updateUserProfileUI();
+      closeProfileModal();
+      showToast(`New profile generated: ${userProfile.userId}`, 'info', 'refresh-cw');
+    }
   }
 
   /* ===================================================================
@@ -236,6 +502,18 @@
       // Note: One-time tasks (task.type === 'one-time') are STRICTLY IGNORED and left unchanged!
     });
 
+    // Check streak rollover if entering a new date
+    if (lastResetDate && lastResetDate !== todayStr && !isSimulated) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = getLocalDateString(yesterday);
+      if (userProfile.stats.lastActiveDate === yesterdayStr) {
+        userProfile.stats.dailyStreakDays = (userProfile.stats.dailyStreakDays || 0) + 1;
+      }
+      userProfile.stats.lastActiveDate = todayStr;
+      saveUserProfile();
+    }
+
     localStorage.setItem(STORAGE_KEY_LAST_RESET, todayStr);
 
     if (resetCount > 0 || isSimulated) {
@@ -243,9 +521,9 @@
       renderTasks();
       updateStats();
       if (isSimulated) {
-        showToast(`Midnight reset simulated! ${resetCount} daily task(s) renewed. One-time tasks preserved.`, 'success', 'moon-star');
+        showToast(`Midnight reset simulated! ${resetCount} daily task(s) renewed. One-time tasks preserved permanently.`, 'success', 'moon-star');
       } else if (resetCount > 0) {
-        showToast(`12:00 AM Midnight Renewal: ${resetCount} daily task(s) refreshed for today!`, 'info', 'repeat');
+        showToast(`12:00 AM Midnight Renewal: ${resetCount} daily habit(s) refreshed for today!`, 'info', 'repeat');
       }
     }
   }
@@ -306,6 +584,12 @@
 
     tasks.unshift(newTask);
     saveTasks();
+
+    // Increment user profile total tasks created
+    userProfile.stats.totalCreated = (userProfile.stats.totalCreated || 0) + 1;
+    userProfile.stats.lastActiveDate = getLocalDateString();
+    saveUserProfile();
+
     renderTasks();
     updateStats();
 
@@ -321,8 +605,12 @@
     task.completed = !task.completed;
     if (task.completed) {
       task.completedDate = getLocalDateString();
+      userProfile.stats.totalCompleted = (userProfile.stats.totalCompleted || 0) + 1;
+      userProfile.stats.lastActiveDate = getLocalDateString();
+      saveUserProfile();
+
       if (task.type === 'daily') {
-        showToast(`Completed daily task! (Will renew tonight at 12:00 AM)`, 'success', 'repeat');
+        showToast(`Completed daily habit! (Will renew tonight at 12:00 AM)`, 'success', 'repeat');
       } else {
         showToast(`Completed one-time task! (Permanently done)`, 'success', 'check-circle-2');
       }
@@ -415,15 +703,13 @@
     });
   }
 
-  // Generate Task HTML
+  // Generate Task HTML Element
   function createTaskElement(task) {
     const item = document.createElement('div');
     item.className = `task-item ${task.completed ? 'completed' : ''}`;
     item.setAttribute('data-id', task.id);
 
     const isDaily = task.type === 'daily';
-    const typeLabel = isDaily ? 'Daily (12 AM Renewal)' : 'One-Time (Permanent)';
-    const typeClass = isDaily ? 'daily' : 'one-time';
 
     const renewalBadge = isDaily
       ? `<span class="renewal-indicator" title="Automatically resets every midnight at 12:00 AM">
@@ -465,7 +751,7 @@
       </div>
     `;
 
-    // Event listeners on buttons
+    // Event listeners
     item.querySelector('[data-action="toggle"]').addEventListener('click', () => toggleTask(task.id));
     item.querySelector('[data-action="edit"]').addEventListener('click', () => openEditModal(task.id));
     item.querySelector('[data-action="delete"]').addEventListener('click', () => deleteTask(task.id));
@@ -600,6 +886,29 @@
      =================================================================== */
 
   function setupEventListeners() {
+    // User Profile Modal Open / Close
+    userProfileBtn.addEventListener('click', openProfileModal);
+    closeProfileModalBtn.addEventListener('click', closeProfileModal);
+    profileModal.addEventListener('click', (e) => {
+      if (e.target === profileModal) closeProfileModal();
+    });
+
+    // Copy User ID
+    copyUserIdBtn.addEventListener('click', copyUserIdToClipboard);
+
+    // Save Profile Display Name
+    saveProfileNameBtn.addEventListener('click', saveProfileName);
+
+    // Backup / Export Data
+    exportDataBtn.addEventListener('click', exportUserData);
+
+    // Import Backup Data
+    importDataBtn.addEventListener('click', () => importFileInput.click());
+    importFileInput.addEventListener('change', importUserData);
+
+    // Reset User ID / Profile
+    resetUserBtn.addEventListener('click', resetUserProfile);
+
     // Add Task Form Submit
     taskForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -681,10 +990,11 @@
     // Theme Toggle
     themeToggleBtn.addEventListener('click', toggleTheme);
 
-    // Escape key closes modal
+    // Escape key closes open modals
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !editModal.classList.contains('hidden')) {
-        closeEditModal();
+      if (e.key === 'Escape') {
+        if (!editModal.classList.contains('hidden')) closeEditModal();
+        if (!profileModal.classList.contains('hidden')) closeProfileModal();
       }
     });
 
@@ -706,6 +1016,7 @@
   function init() {
     initTheme();
     loadTasks();
+    loadUserProfile();
     checkAndResetDailyTasks(); // Check if today is a new day compared to last reset
     scheduleMidnightTimer();
     updateMidnightCountdown();

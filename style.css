@@ -1,19 +1,28 @@
 /* ===================================================================
-   Neumorphic Design System & Variables
+   Neumorphic Design System & Harmonized Palette
+   Featuring Authentic Teal (#035352) & Sidecar Yellow (#F3E8BC)
+   Blended with Crisp Neumorphic Soft Light & Dark Slate
    =================================================================== */
 
 :root {
   /* Typography */
   --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Light Neumorphism Theme Colors */
-  --bg-body: #e9eef6;
-  --bg-card: #e9eef6;
-  --text-main: #2d3748;
+  /* Signature Brand Color Tokens */
+  --color-authentic-teal: #035352;
+  --color-authentic-teal-vibrant: #057a78;
+  --color-authentic-teal-light: #0d9488;
+  --color-sidecar-yellow: #F3E8BC;
+  --color-sidecar-yellow-dark: #b45309;
+
+  /* Light Neumorphism Theme Colors (Crisp, High-Clarity Canvas) */
+  --bg-body: #eef2f6;
+  --bg-card: #eef2f6;
+  --text-main: #1e293b;
   --text-muted: #64748b;
   --text-light: #94a3b8;
   
-  /* Neumorphic Shadows - Light Mode */
+  /* Neumorphic Shadows - Crisp Light Mode */
   --neu-shadow-raised: 8px 8px 18px rgba(166, 180, 200, 0.55), -8px -8px 18px rgba(255, 255, 255, 0.95);
   --neu-shadow-raised-sm: 4px 4px 10px rgba(166, 180, 200, 0.45), -4px -4px 10px rgba(255, 255, 255, 0.9);
   --neu-shadow-inset: inset 4px 4px 8px rgba(166, 180, 200, 0.5), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
@@ -21,22 +30,23 @@
   --neu-shadow-convex: 5px 5px 12px rgba(166, 180, 200, 0.45), -5px -5px 12px rgba(255, 255, 255, 0.9);
   
   /* Accent Colors */
-  --accent-primary: #2563eb;
-  --accent-primary-hover: #1d4ed8;
-  --accent-daily: #0284c7;
-  --accent-onetime: #7c3aed;
-  --accent-success: #10b981;
+  --accent-primary: #035352;
+  --accent-primary-hover: #046b6a;
+  --accent-secondary: #F3E8BC;
+  --accent-daily: #035352;
+  --accent-onetime: #92400e;
+  --accent-success: #035352;
   --accent-danger: #ef4444;
-  --accent-warning: #f59e0b;
+  --accent-warning: #d97706;
 
   /* Badges & Pills */
-  --badge-daily-bg: rgba(2, 132, 199, 0.12);
-  --badge-daily-text: #0369a1;
-  --badge-onetime-bg: rgba(124, 58, 237, 0.12);
-  --badge-onetime-text: #6d28d9;
+  --badge-daily-bg: rgba(3, 83, 82, 0.12);
+  --badge-daily-text: #035352;
+  --badge-onetime-bg: #F3E8BC;
+  --badge-onetime-text: #78350f;
 
   /* Borders & Highlights */
-  --border-subtle: rgba(255, 255, 255, 0.65);
+  --border-subtle: rgba(255, 255, 255, 0.7);
   --border-radius-xl: 24px;
   --border-radius-lg: 16px;
   --border-radius-md: 12px;
@@ -50,23 +60,30 @@
 
 /* Dark Neumorphism Theme */
 body.dark-mode {
-  --bg-body: #191c24;
-  --bg-card: #191c24;
-  --text-main: #f1f5f9;
+  --bg-body: #111827;
+  --bg-card: #162032;
+  --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --text-light: #64748b;
 
-  --neu-shadow-raised: 8px 8px 18px rgba(10, 12, 16, 0.85), -8px -8px 18px rgba(36, 42, 54, 0.6);
-  --neu-shadow-raised-sm: 4px 4px 10px rgba(10, 12, 16, 0.75), -4px -4px 10px rgba(36, 42, 54, 0.5);
-  --neu-shadow-inset: inset 4px 4px 8px rgba(10, 12, 16, 0.85), inset -4px -4px 8px rgba(36, 42, 54, 0.4);
-  --neu-shadow-inset-sm: inset 2px 2px 5px rgba(10, 12, 16, 0.75), inset -2px -2px 5px rgba(36, 42, 54, 0.35);
-  --neu-shadow-convex: 5px 5px 12px rgba(10, 12, 16, 0.8), -5px -5px 12px rgba(36, 42, 54, 0.5);
+  --neu-shadow-raised: 8px 8px 18px rgba(8, 12, 20, 0.85), -8px -8px 18px rgba(32, 44, 68, 0.5);
+  --neu-shadow-raised-sm: 4px 4px 10px rgba(8, 12, 20, 0.75), -4px -4px 10px rgba(32, 44, 68, 0.4);
+  --neu-shadow-inset: inset 4px 4px 8px rgba(8, 12, 20, 0.85), inset -4px -4px 8px rgba(32, 44, 68, 0.35);
+  --neu-shadow-inset-sm: inset 2px 2px 5px rgba(8, 12, 20, 0.75), inset -2px -2px 5px rgba(32, 44, 68, 0.3);
+  --neu-shadow-convex: 5px 5px 12px rgba(8, 12, 20, 0.8), -5px -5px 12px rgba(32, 44, 68, 0.4);
 
-  --badge-daily-bg: rgba(14, 165, 233, 0.2);
-  --badge-daily-text: #38bdf8;
-  --badge-onetime-bg: rgba(139, 92, 246, 0.2);
-  --badge-onetime-text: #c084fc;
-  --border-subtle: rgba(255, 255, 255, 0.06);
+  --accent-primary: #14b8a6;
+  --accent-primary-hover: #2dd4bf;
+  --accent-secondary: #F3E8BC;
+  --accent-daily: #14b8a6;
+  --accent-onetime: #F3E8BC;
+  --accent-success: #14b8a6;
+
+  --badge-daily-bg: rgba(20, 184, 166, 0.2);
+  --badge-daily-text: #2dd4bf;
+  --badge-onetime-bg: rgba(243, 232, 188, 0.2);
+  --badge-onetime-text: #F3E8BC;
+  --border-subtle: rgba(255, 255, 255, 0.08);
 }
 
 /* ===================================================================
@@ -122,7 +139,7 @@ body {
   background: var(--bg-card);
   box-shadow: var(--neu-shadow-inset);
   border-radius: var(--border-radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   transition: var(--transition-fast);
 }
 
@@ -137,16 +154,16 @@ body {
 
 /* Buttons */
 .neu-btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, #057a78, #035352);
   color: #ffffff;
-  border: none;
+  border: 1px solid rgba(243, 232, 188, 0.35);
   padding: 0.85rem 1.6rem;
   border-radius: var(--border-radius-md);
   font-family: inherit;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 4px 4px 12px rgba(37, 99, 235, 0.35), -2px -2px 8px rgba(255, 255, 255, 0.4);
+  box-shadow: 4px 4px 12px rgba(3, 83, 82, 0.35), -2px -2px 8px rgba(255, 255, 255, 0.6);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -157,17 +174,18 @@ body {
 .neu-btn-primary svg {
   width: 18px;
   height: 18px;
+  stroke-width: 2.5;
 }
 
 .neu-btn-primary:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #079693, #046b6a);
   transform: translateY(-2px);
-  box-shadow: 6px 6px 16px rgba(37, 99, 235, 0.45), -2px -2px 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 6px 6px 16px rgba(3, 83, 82, 0.45), -2px -2px 10px rgba(255, 255, 255, 0.7);
 }
 
 .neu-btn-primary:active {
   transform: translateY(1px);
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .neu-btn-secondary {
@@ -195,6 +213,7 @@ body {
 .neu-btn-secondary:hover {
   transform: translateY(-1px);
   color: var(--accent-primary);
+  border-color: rgba(3, 83, 82, 0.25);
 }
 
 .neu-btn-secondary:active {
@@ -265,6 +284,7 @@ body {
   height: 52px;
   border-radius: 16px;
   color: var(--accent-primary);
+  background: linear-gradient(135deg, rgba(3, 83, 82, 0.12), rgba(243, 232, 188, 0.5));
 }
 
 .logo-icon svg {
@@ -276,7 +296,7 @@ body {
   font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--text-main) 60%, var(--accent-primary));
+  background: linear-gradient(135deg, var(--text-main) 50%, var(--accent-primary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -292,6 +312,82 @@ body {
   display: flex;
   align-items: center;
   gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+/* User Profile Badge */
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--border-radius-full);
+  border: 1px solid rgba(243, 232, 188, 0.6);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition-fast);
+  color: var(--text-main);
+  text-align: left;
+}
+
+.user-profile-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--neu-shadow-raised-sm);
+  color: var(--accent-primary);
+}
+
+.user-profile-badge:active {
+  transform: translateY(1px);
+  box-shadow: var(--neu-shadow-inset-sm);
+}
+
+.user-avatar-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(3, 83, 82, 0.15), rgba(243, 232, 188, 0.7));
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.user-avatar-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.user-badge-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.user-id-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+}
+
+.user-status-text {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 6px rgba(3, 83, 82, 0.7);
+  display: inline-block;
 }
 
 /* Midnight Tracker */
@@ -348,7 +444,7 @@ body {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -359,6 +455,8 @@ body {
   gap: 0.85rem;
   padding: 0.85rem 1.1rem;
   border-radius: var(--border-radius-lg);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .stat-icon {
@@ -387,13 +485,14 @@ body {
 }
 
 .stat-icon.total-color {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--accent-success);
+  background: rgba(3, 83, 82, 0.12);
+  color: var(--accent-primary);
 }
 
 .stat-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .stat-num {
@@ -407,6 +506,7 @@ body {
   font-size: 0.72rem;
   color: var(--text-muted);
   font-weight: 600;
+  line-height: 1.3;
 }
 
 /* ===================================================================
@@ -748,7 +848,8 @@ body {
 .task-list {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1rem;
+  padding: 4px 2px;
 }
 
 /* Task Item Card */
@@ -757,39 +858,40 @@ body {
   border-radius: var(--border-radius-lg);
   box-shadow: var(--neu-shadow-raised-sm);
   border: 1px solid var(--border-subtle);
-  padding: 1rem 1.25rem;
+  padding: 1.05rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   position: relative;
-  overflow: hidden;
+  z-index: 1;
 }
 
 .task-item:hover {
   transform: translateY(-2px);
   box-shadow: var(--neu-shadow-raised);
+  z-index: 3;
 }
 
 .task-item.completed {
-  opacity: 0.75;
+  opacity: 0.78;
 }
 
 /* Left side of Task (Checkbox + Details) */
 .task-main {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.95rem;
   flex: 1;
   min-width: 0;
 }
 
 /* Neumorphic Custom Checkbox */
 .neu-checkbox {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
   background: var(--bg-card);
   box-shadow: var(--neu-shadow-inset-sm);
   border: none;
@@ -808,9 +910,9 @@ body {
 }
 
 .task-item.completed .neu-checkbox {
-  background: linear-gradient(135deg, #10b981, #059669);
-  box-shadow: 2px 2px 6px rgba(16, 185, 129, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.5);
-  color: #ffffff;
+  background: linear-gradient(135deg, #057a78, #035352);
+  box-shadow: 2px 2px 6px rgba(3, 83, 82, 0.45), inset 1px 1px 2px rgba(243, 232, 188, 0.5);
+  color: #F3E8BC;
 }
 
 .neu-checkbox svg {
@@ -823,8 +925,9 @@ body {
 .task-details {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
   min-width: 0;
+  flex: 1;
 }
 
 .task-title {
@@ -832,6 +935,8 @@ body {
   font-weight: 600;
   color: var(--text-main);
   word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.38;
   transition: var(--transition-fast);
 }
 
@@ -844,13 +949,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  row-gap: 0.35rem;
   flex-wrap: wrap;
 }
 
 .task-tag {
   font-size: 0.7rem;
   font-weight: 600;
-  padding: 0.12rem 0.55rem;
+  padding: 0.15rem 0.55rem;
   border-radius: var(--border-radius-full);
   background: var(--bg-card);
   box-shadow: var(--neu-shadow-inset-sm);
@@ -858,6 +964,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+  white-space: nowrap;
 }
 
 .task-tag svg {
@@ -872,6 +979,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+  white-space: nowrap;
 }
 
 .task-time-badge svg {
@@ -882,13 +990,14 @@ body {
 .task-type-badge {
   font-size: 0.68rem;
   font-weight: 700;
-  padding: 0.12rem 0.55rem;
+  padding: 0.15rem 0.55rem;
   border-radius: var(--border-radius-full);
   text-transform: uppercase;
   letter-spacing: 0.03em;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+  white-space: nowrap;
 }
 
 .task-type-badge svg {
@@ -984,6 +1093,7 @@ body {
   height: 64px;
   border-radius: 20px;
   color: var(--accent-primary);
+  background: linear-gradient(135deg, rgba(3, 83, 82, 0.15), rgba(243, 232, 188, 0.5));
   margin-bottom: 0.5rem;
 }
 
@@ -1054,7 +1164,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(15, 23, 42, 0.48);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -1075,6 +1185,8 @@ body {
 .modal-card {
   width: 100%;
   max-width: 500px;
+  max-height: calc(100vh - 2.5rem);
+  overflow-y: auto;
   background: var(--bg-card);
   border-radius: var(--border-radius-xl);
   padding: 1.75rem;
@@ -1084,6 +1196,17 @@ body {
   gap: 1.25rem;
   transform: translateY(0);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-light) transparent;
+}
+
+.modal-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-card::-webkit-scrollbar-thumb {
+  background-color: var(--text-light);
+  border-radius: 9999px;
 }
 
 .modal-overlay.hidden .modal-card {
@@ -1094,6 +1217,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .modal-title {
@@ -1108,6 +1232,7 @@ body {
 .modal-title svg {
   width: 20px;
   height: 20px;
+  color: var(--accent-primary);
 }
 
 .modal-form {
@@ -1122,6 +1247,160 @@ body {
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 0.5rem;
+}
+
+/* ===================================================================
+   User Profile & Progress Modal
+   =================================================================== */
+
+.profile-modal-card {
+  max-width: 540px;
+  gap: 1.35rem;
+}
+
+.profile-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.profile-avatar-large {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: var(--accent-primary);
+  background: linear-gradient(135deg, rgba(3, 83, 82, 0.15), rgba(243, 232, 188, 0.6));
+  flex-shrink: 0;
+}
+
+.profile-avatar-large svg {
+  width: 24px;
+  height: 24px;
+}
+
+.profile-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* User ID Card */
+.user-id-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.15rem;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(243, 232, 188, 0.7);
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.user-id-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-id-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.user-id-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.copy-id-btn {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+/* Profile Stats Grid */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.profile-stat-box {
+  display: flex;
+  flex-direction: column;
+  padding: 0.85rem 1rem;
+  border-radius: var(--border-radius-md);
+  gap: 0.2rem;
+}
+
+.profile-stat-number {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.profile-stat-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Profile Actions Section */
+.profile-actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.profile-btn-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.profile-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.profile-link-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-fast);
+}
+
+.profile-link-btn:hover {
+  color: var(--accent-primary);
+  background: rgba(3, 83, 82, 0.08);
+}
+
+.profile-link-btn.danger-link:hover {
+  color: var(--accent-danger);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.profile-link-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* ===================================================================
@@ -1160,7 +1439,7 @@ body {
   height: 18px;
 }
 
-.toast.success svg { color: var(--accent-success); }
+.toast.success svg { color: var(--accent-primary); }
 .toast.info svg { color: var(--accent-primary); }
 .toast.warning svg { color: var(--accent-warning); }
 
@@ -1191,6 +1470,20 @@ body {
   .header-actions {
     width: 100%;
     justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .user-profile-badge {
+    padding: 0.4rem 0.75rem;
+  }
+
+  .midnight-tracker {
+    padding: 0.45rem 0.85rem;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 
   .form-row-details {
@@ -1204,6 +1497,7 @@ body {
   .filter-tabs-wrapper {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
 
   .filter-tabs {
@@ -1213,5 +1507,19 @@ body {
   #simulateMidnightBtn {
     width: 100%;
     justify-content: center;
+  }
+
+  .profile-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .toast {
+    width: 100%;
   }
 }
